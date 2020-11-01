@@ -23,7 +23,7 @@ iterasi = 1
 stop = False
 
 if Fa * Fb > 0:
-    print('Tidak ada akar')
+    print('Persamaan tidak mempunyai akar')
 else:
     while not stop:
         ar.append([iterasi, a, b, c, Fa, Fb, Fc])
