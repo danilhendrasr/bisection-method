@@ -47,12 +47,12 @@ err = abs(b-a)
 Fc = evaluateEquation(c)
 
 ar = []
-tableHeaders = ["Iterasi", "a", "b", "c", "F(a)", "F(b)", "F(c)", "Error"]
+tableHeaders = ["Iterasi ke-", "a", "b", "c", "F(a)", "F(b)", "F(c)", "Error"]
 
-iterasi = 1
+iterasi = 0
 stop = False
 while not stop:
-    ar.append([iterasi, a, b, c, Fa, Fb, Fc, err])
+    ar.append([iterasi+1, a, b, c, Fa, Fb, Fc, err])
 
     if Fa * Fc >= 0:
         a = c
@@ -74,5 +74,5 @@ while not stop:
 clearTerminal()
 print(tabulate(ar, headers=tableHeaders, tablefmt="psql"))
 print("\n----- Hasil -----")
-print("Iterasi ke-: ", iterasi-1)
+print("Iterasi ke-{}".format(iterasi))
 print("Aproksimasi akar: ", hasil)
