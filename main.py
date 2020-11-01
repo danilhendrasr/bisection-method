@@ -1,50 +1,70 @@
+import os
 from tabulate import tabulate
 
 
 def evaluateEquation(number):
-    return eval(equation[4:].replace("x", str(number)))
+    return eval(equation.replace("x", str(number)))
 
 
-equation = "y = pow(x, 3) - 7*x + 1"
+equationTemplate = "y = x^q - r*x + s"
+equation = "pow(x, q) - r*x + s"
 
-a = 2.5
-b = 2.6
-c = (a + b) / 2
-error = 0.005
+print("-- Masukkan persamaan --")
+print("Format persamaan:\n ", equationTemplate)
+q = int(input("Masukkan nilai q: "))
+r = int(input("Masukkan nilai r: "))
+s = int(input("Masukkan nilai s: "))
+
+rawEquation = equationTemplate.replace(
+    "q", str(q)).replace("r", str(r)).replace("s", str(s))
+
+os.system('cls' if os.name == 'nt' else 'clear')
+print("Persamaan yang didapat: ", rawEquation)
+
+print("---------------")
+print("Masukkan nilai")
+a = float(input("Masukkan nilai selang a: "))
+b = float(input("Masukkan nilai selang b: "))
+toleransiError = float(input("Masukkan toleransi error: "))
 
 Fa = evaluateEquation(a)
 Fb = evaluateEquation(b)
+
+if Fa * Fb > 0:
+    print("\n-- Tidak dapat dilakukan operasi... Persamaan tidak memiliki akar --")
+    exit()
+
+c = (a + b) / 2
+err = abs(b-a)
+
 Fc = evaluateEquation(c)
 
 ar = []
-tableHeaders = ["Iterasi", "a", "b", "c", "F(a)", "F(b)", "F(c)"]
+tableHeaders = ["Iterasi", "a", "b", "c", "F(a)", "F(b)", "F(c)", "Error"]
 
 iterasi = 1
 stop = False
+while not stop:
+    ar.append([iterasi, a, b, c, Fa, Fb, Fc, err])
 
-if Fa * Fb > 0:
-    print('Persamaan tidak mempunyai akar')
-else:
-    while not stop:
-        ar.append([iterasi, a, b, c, Fa, Fb, Fc])
+    if Fa * Fc >= 0:
+        a = c
+    else:
+        b = c
 
-        if Fa * Fc >= 0:
-            a = c
-        else:
-            b = c
+    if err <= toleransiError:
+        hasil = c
+        stop = True
 
-        if abs(Fc) <= error:
-            hasil = c
-            stop = True
+    c = (a + b) / 2
+    err = abs(b-a)
+    Fa = evaluateEquation(a)
+    Fb = evaluateEquation(b)
+    Fc = evaluateEquation(c)
 
-        c = (a + b) / 2
-        Fa = evaluateEquation(a)
-        Fb = evaluateEquation(b)
-        Fc = evaluateEquation(c)
+    iterasi += 1
 
-        iterasi += 1
-
-    print(tabulate(ar, headers=tableHeaders, tablefmt="github"))
-    print("\n---Hasil---")
-    print("Iterasi ke-: ", iterasi-1)
-    print("Aproksimasi akar: ", hasil)
+print(tabulate(ar, headers=tableHeaders, tablefmt="github"))
+print("\n---Hasil---")
+print("Iterasi ke-: ", iterasi-1)
+print("Aproksimasi akar: ", hasil)
