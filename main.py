@@ -1,14 +1,17 @@
 from tabulate import tabulate
 
-equation = "y = pow(x, 3) - 7*x + 1"
+"y = x^2 - 6x + 8"
 
-a = 2.5
-b = 2.6
+equation = "y = pow(x, 2) - 6*x + 8"
+
+a = 3
+b = 6
 c = (a + b) / 2
+error = 0.005
 
-Fa = eval(equation[4:].replace("x", str(a)))
-Fb = eval(equation[4:].replace("x", str(b)))
-Fc = eval(equation[4:].replace("x", str(c)))
+Fa = evaluateEquation(a)
+Fb = evaluateEquation(b)
+Fc = evaluateEquation(c)
 
 ar = []
 tableHeaders = ["Iterasi", "a", "b", "c", "F(a)", "F(b)", "F(c)"]
@@ -18,9 +21,27 @@ stop = False
 while not stop:
     ar.append([iterasi, a, b, c, Fa, Fb, Fc])
 
-    if iterasi >= 1:
+    if Fa > 0 and Fc > 0 or Fa < 0 and Fc < 0:
+        a = c
+    else:
+        b = c
+
+    if abs(Fc) <= error:
+        hasil = c
         stop = True
+
+    c = (a + b) / 2
+    Fa = evaluateEquation(a)
+    Fb = evaluateEquation(b)
+    Fc = evaluateEquation(c)
 
     iterasi += 1
 
 print(tabulate(ar, headers=tableHeaders, tablefmt="github"))
+print("\n---Hasil---")
+print("Iterasi ke-: ", iterasi-1)
+print("Aproksimasi akar: ", hasil)
+
+
+def evaluateEquation(number):
+    return eval(equation[4:].replace("x", str(number)))
