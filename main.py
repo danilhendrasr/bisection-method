@@ -10,8 +10,8 @@ def clearTerminal():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
-def exitProgram():
-    print("\n-- Tidak dapat dilakukan operasi... Persamaan tidak memiliki akar --")
+def exitProgram(message):
+    print("\n-- {} --".format(message))
     exit()
 
 
@@ -34,12 +34,13 @@ print("-----------------------")
 a = float(input("Masukkan nilai selang a: "))
 b = float(input("Masukkan nilai selang b: "))
 toleransiError = float(input("Masukkan nilai toleransi error: "))
+maxIterasi = int(input("Masukkan maksimal iterasi (0 jika tidak ada): "))
 
 Fa = evaluateEquation(a)
 Fb = evaluateEquation(b)
 
 if Fa * Fb > 0:
-    exitProgram()
+    exitProgram("Tidak dapat dilakukan operasi... Persamaan tidak memiliki akar")
 
 c = (a + b) / 2
 err = abs(b-a)
@@ -58,6 +59,10 @@ while not stop:
         a = c
     else:
         b = c
+
+    if maxIterasi != 0 and (iterasi + 1) == maxIterasi:
+        hasil = c
+        stop = True
 
     if err <= toleransiError:
         hasil = c
